@@ -1,0 +1,48 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>Watchlist</h2>
+    
+
+    {%for content in contents%}
+    <div class="row ">
+
+       
+        <div class="col-sm-4">
+            <div><img src="{{ content.listing_id.photo }}" alt="listing Image" width="200" height="200" ></div>    
+        </div>
+        <div class="col-sm-4">
+            <h3><a href="{%url 'listing' content.listing_id.id%}">{{content.listing_id.title}}</a></h3>
+            
+            <h5>Listing by {{content.listing_id.user_id}}</h5>
+            <div>created on  {{content.listing_id.date}}</div>
+              
+        </div>
+        <div class="col-sm-4">
+            {%if content.listing_id.status == "closed" %}
+            <h4> Status:<span style="color:red">{{content.listing_id.status}}</span></h4>
+            {%else%}
+            <h4> Status:<span style="color:green">{{content.listing_id.status}}</span></h4>
+            {%endif%}
+          
+        
+            
+    
+      
+    </div>
+    </div>
+    <div class="dropdown-divider"></div> 
+    {%empty%}
+   <h3> You have not added any listing to your watchlist</h3>
+
+   
+   
+   
+   {%endfor%}
+   
+
+
+
+{% endblock %}
+

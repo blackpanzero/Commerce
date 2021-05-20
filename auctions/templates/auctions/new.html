@@ -1,0 +1,53 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+                        <form class="text-center border border-light p-5 new-form"  action="" method="POST">
+                            {% csrf_token %}
+                            <div class="contact-h4">
+                              <br>
+                              <p class="h4 mb-4 contact-h4"><h3>Create Listing</h3></p>
+                              
+                            </div>
+                            <br>
+                            
+                              <!-- listing title -->
+                              <input type="text" id="defaultContactFormName" class="form-control mb-4 fieldset" placeholder="Title of listing" name="title">
+                        
+                              <!-- Link to photo -->
+                              <input type="text" id="defaultContactFormName" class="form-control mb-4 fieldset" placeholder="Link to photo" name="photo">
+                            
+                              <!-- starting price -->
+                              <input type="number" id="defaultContactFormEmail" class="form-control mb-4 fieldset" placeholder="starting price" name="price">
+                              
+                            
+                              <!-- category -->
+                              <label>Category</label>
+                              
+                              <select class="browser-default custom-select mb-4 form-control" name="category">
+                                  <option class="hover-color" value="" disabled>Choose category</option>
+                                  {%for category in categories%}
+                                  <option class="hover-color" value="{{category}}" selected>{{category}}</option>
+                                  {%endfor%}
+                                 
+                              </select>
+                            
+                              <!-- Description -->
+                              <div class="form-group">
+                                  <textarea class="form-control rounded-0 fieldset" id="exampleFormControlTextarea2" rows="5" placeholder="Description" name="description"></textarea>
+                              </div>
+                            
+                            
+                            
+                              <!-- Send button -->
+                              <button class="btn btn-info btn-block" type="submit">Send</button>
+                            
+                            </form>
+                            <!-- Default form contact -->
+                            
+
+	
+
+
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>Listings by {{username}}</h2>
+  
+
+    {%for listing in listings%}
+
+   
+
+    <div class="row ">
+
+       
+        <div class="col-sm-4">
+            <div><img src="{{ listing.photo }}" alt="listing Image" width="200" height="200" ></div>    
+        </div>
+        <div class="col-sm-4">
+            <h3><a href="{%url 'listing' listing.id%}">{{listing.title}}</a></h3>
+            
+            <h5>Listing by {{listing.user_id}}</h5>
+            <div>created on  {{listing.date}}</div>
+              
+        </div>
+        <div class="col-sm-4">
+            
+    
+      
+    </div>
+    </div>
+    <div class="dropdown-divider"></div> 
+    {%endfor%}
+
+
+
+{% endblock %}

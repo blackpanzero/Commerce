@@ -1,0 +1,201 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="row ">
+    <div class="col-sm-4">
+<h1><a href="{%url 'listing' listing.id%}" style="color:burlywood">{{listing.title}}</a>  </h1>   
+
+
+</div>
+<div class="col-sm-6">
+    {%if listing.status == "closed" %}
+    <h3> Status:<span style="color:red">{{listing.status}}</span></h3>
+    {%else%}
+    <h3> Status:<span style="color:green">{{listing.status}}</span></h3>
+    {%endif%}
+
+</div>
+<div class="col-sm-2">
+    {% if user.is_authenticated %}
+    {%if watchlist%}
+    <h5> <a href="{%url 'remove_watchlist' listing.id%}" style="color:burlywood">Remove from watchlist </a></h5>
+ 
+ 
+ 
+ {%else%}
+ 
+     <h5><a href="{%url 'add_watchlist' listing.id%}" style="color:burlywood">Add to watchlist</a></h5>
+ 
+ 
+ 
+ {%endif%}
+ {%endif%}
+</div>
+</div>
+    
+    
+
+   
+
+        <div class="row ">
+    
+           
+            <div class="col-sm-4">
+                <div><img src="{{ listing.photo }}" alt="listing Image" width="350" height="300" ></div>    
+            </div>
+           
+            <div class="col-sm-8">
+                
+                <h2>Description</h2>
+                {% if user.is_authenticated %}
+                {%if current_user == first_bider%}
+
+               <h4> <a href="{%url 'close_auction' listing.id %}">close bid</a></h4>
+                {%endif%}
+                {%endif%}
+
+               
+                
+                <h5>Listing by <a href="{%url 'profile' listing.user_id.id%}">{{listing.user_id}}</a></h5>
+                <div>created on  {{listing.date}}</div>
+                <div>Category:<a href="{%url 'category' listing.categories%}">{{listing.categories}} </a></div>
+
+               
+
+                {{listing.description}}
+                <br>
+                <br>
+                <h3>bids</h3>
+                <div> current bid:<span style="color: rgb(0, 255, 170);">${{bid}}</span>     Total number of bids:<span style="color: rgb(0, 255, 170);">{{count}} </span> {%if highest_bider%} {%if winner !=  first_bider%} <strong> Your bid is the highest!</strong>{%endif%}{%endif%} </div>
+                {% if user.is_authenticated %}
+
+                {%if listing.status == "closed" %}
+                {%if current_user == winner%}
+                {%if bid != 0%}
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    <span>Congratulation {{ winner }} ,you won the bid $({{bid}})</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {%else%}
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    <span>Sorry {{ winner }} ,no bids were made for your product</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {%endif%}
+                {%endif%}
+                {%endif%}
+
+                {%if current_user != first_bider%}
+
+                {%if listing.status == "active" %}
+        
+                {% if message %}
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %}
+               
+                <form method="POST" action="">
+                    {% csrf_token %} 
+                    
+                    <input type="number"  placeholder="${{bid}}" name="bid" required>
+                    <input type="submit" value="place bid">
+                </form>
+                <br>
+                {%endif%}
+                {%endif%}
+                {%else%}
+                <a  href="{%url 'login'%}">Login</a> To place your bid
+                {%endif%}
+                
+                        
+                  
+            </div>
+
+          
+               
+        
+          
+       
+        </div>
+       
+
+        
+       
+        <h4 class="alert alert-warning">Comments</h4>
+        <div >
+            <h2></h2>
+            {%for comment in comments%}
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1" style="color:burlywood">{{comment.user_id}} </h6>
+                        
+                    </div>
+                    <p class="mb-1">{{comment.comments}}</p>
+                    <small>{{comment.date}}</small>
+                   
+                </a>
+                <div class="dropdown-divider"></div>
+            </div>
+            {%empty%}
+           
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1"> No comments </h6>
+                        
+                    </div>
+                   
+                  
+                </a>
+               
+            </div>
+
+            {% endfor %}
+        </div>
+        
+       
+        {% if user.is_authenticated %}
+        {%if listing.status == "active" %}
+        <form method="POST" class=" text-center  border-light p-5 form-review" action="{%url 'comment' listing.id%}">
+            {% csrf_token %}
+            <div class="contact-h4">
+
+               
+                <p class="h4 mb-4 contact-h4"><h3>Add comment </h3> </p>
+                
+              </div>
+              
+
+        
+            
+            
+                <div class="form-group ">
+                    <div class="input-group">
+                        
+                        <textarea name="comment" id="comment" class="form-control" rows="5" placeholder="comment" required></textarea>
+                    </div>
+                </div>
+                <div class="form-group col-sm">
+                    <button class="btn btn-info btn-block"" type="submit">Submit</button>
+                
+            </div>
+        </form>
+        {%endif%}
+        {%else%}
+        <h3><a href="{%url 'login'%}">Signin </a> to Add comments</h3>
+        {%endif%}
+  
+ 
+
+
+{% endblock %}
